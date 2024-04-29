@@ -35,3 +35,36 @@ ul {
 a {
   text-decoration: none;
 }
+
+/*
+=============== 
+APP Styles
+===============
+*/
+main {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+.board {
+  display: grid;
+  height: 80vw;
+  aspect-ratio: 1/1;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  border: 1px solid black;
+  gap: 2px;
+  padding: 2px;
+  background-color: bisque;
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: calc(1rem + 2vw);
+  border: 1px solid grey;
+  background: lightyellow;
+  cursor: pointer;
+}
