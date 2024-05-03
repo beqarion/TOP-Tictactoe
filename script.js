@@ -66,6 +66,7 @@ function WinningLogic(board, row, col) {
     if (row < 0 || row >= board.length || col < 0 || col >= board[0].length) {
       return null; //out of bounds
     }
+    console.log(board);
     return board[row][col].getValue();
   };
   // function to check in both directions from a given start point
@@ -148,9 +149,6 @@ function GameController(
       /*  This is where we would check for a winner and handle that logic,
         such as a win message. */
       const winningLogic = WinningLogic(board.getBoard(), row, column);
-      if (winningLogic.checkWin()) {
-        // console.log(`the winner is ${getActivePlayer().name}`);
-      }
 
       // Switch player turn
       switchPlayerTurn();
@@ -214,7 +212,7 @@ function screenController() {
 
     if (!selectedColumn || !selectedRow) return;
 
-    game.playRound(selectedRow, selectedColumn);
+    game.playRound(+selectedRow, +selectedColumn);
     updateScreen();
   }
   boardDiv.addEventListener("click", clickHandlerBoard);
