@@ -60,6 +60,48 @@ function Cell() {
   };
 }
 
+// winning logic
+function WinningLogic(board, row, col) {
+  const cellValueAt = (row, col) => {
+    if (row < 0 || row >= board.length || col < 0 || col >= board[0].length) {
+      return null; //out of bounds
+    }
+    return board[row][col].getValue();
+  };
+  // function to check in both directions from a given start point
+  const checkDirection = (dx, dy) => {
+    let count = 1; //current cell is already included
+    let r = row + dx;
+    let c = col + dy;
+
+    while (cellValueAt(r, c) === board[row][col]) {
+      count++;
+      r += dx;
+      c += dy;
+    }
+
+    // check reverse direction from starting point
+    r = row - dx;
+    c = col - dy;
+    while (cellValueAt(r, c) === board[row][col]) {
+      count++;
+      r -= dx;
+      c -= dy;
+    }
+    return count;
+  };
+  const checkWin = () => {
+    if (checkDirection(1, 0) >= 3) return true; //Vertical
+    if (checkDirection(0, 1) >= 3) return true; //Horizontal
+    if (checkDirection(1, 1) >= 3) return true; //Diagonal forward
+    if (checkDirection(-1, 1) >= 3) return true; //Diagonal backward
+
+    return false;
+  };
+  return { checkWin };
+}
+// end of winning logic
+
 /*
  ** The GameController will be responsible for controlling the
  ** flow and state of the game's turns, as well as whether
@@ -105,6 +147,11 @@ function GameController(
       );
       /*  This is where we would check for a winner and handle that logic,
         such as a win message. */
+      const winningLogic = WinningLogic(board.getBoard(), row, column);
+      if (winningLogic.checkWin()) {
+        // console.log(`the winner is ${getActivePlayer().name}`);
+      }
+
       // Switch player turn
       switchPlayerTurn();
     } else {

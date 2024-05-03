@@ -48,7 +48,8 @@ main {
 }
 .board {
   display: grid;
-  height: 80vw;
+  max-height: 80vh;
+  max-width: 80vw;
   aspect-ratio: 1/1;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
