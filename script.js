@@ -66,17 +66,18 @@ function WinningLogic(board, row, col) {
     if (row < 0 || row >= board.length || col < 0 || col >= board[0].length) {
       return null; //out of bounds
     }
-    console.log(board);
     return board[row][col].getValue();
   };
+  const seenCells = [[row, col]];
   // function to check in both directions from a given start point
   const checkDirection = (dx, dy) => {
     let count = 1; //current cell is already included
     let r = row + dx;
     let c = col + dy;
 
-    while (cellValueAt(r, c) === board[row][col]) {
+    while (cellValueAt(r, c) === board[row][col].getValue()) {
       count++;
+      seenCells.push([r, c]);
       r += dx;
       c += dy;
     }
@@ -84,8 +85,9 @@ function WinningLogic(board, row, col) {
     // check reverse direction from starting point
     r = row - dx;
     c = col - dy;
-    while (cellValueAt(r, c) === board[row][col]) {
+    while (cellValueAt(r, c) === board[row][col].getValue()) {
       count++;
+      seenCells.push([r, c]);
       r -= dx;
       c -= dy;
     }
@@ -96,10 +98,13 @@ function WinningLogic(board, row, col) {
     if (checkDirection(0, 1) >= 3) return true; //Horizontal
     if (checkDirection(1, 1) >= 3) return true; //Diagonal forward
     if (checkDirection(-1, 1) >= 3) return true; //Diagonal backward
-
+    console.log("board: ");
     return false;
   };
-  return { checkWin };
+  return {
+    checkWin,
+    winningCells: seenCells,
+  };
 }
 // end of winning logic
 
@@ -127,6 +132,7 @@ function GameController(
   ];
 
   let activePlayer = players[0];
+  let winningLogic;
 
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -148,7 +154,10 @@ function GameController(
       );
       /*  This is where we would check for a winner and handle that logic,
         such as a win message. */
-      const winningLogic = WinningLogic(board.getBoard(), row, column);
+      winningLogic = WinningLogic(board.getBoard(), row, column);
+      if (winningLogic.checkWin()) {
+        console.log(winningLogic.winningCells);
+      }
 
       // Switch player turn
       switchPlayerTurn();
@@ -171,6 +180,7 @@ function GameController(
     playRound,
     getActivePlayer,
     getBoard: board.getBoard,
+    winningLogic,
   };
 }
 
@@ -207,12 +217,10 @@ function screenController() {
 
   // Add event listener for the board
   function clickHandlerBoard(e) {
-    const selectedRow = e.target.dataset.row;
-    const selectedColumn = e.target.dataset.column;
+    const selectedRow = +e.target.dataset.row;
+    const selectedColumn = +e.target.dataset.column;
 
-    if (!selectedColumn || !selectedRow) return;
-
-    game.playRound(+selectedRow, +selectedColumn);
+    game.playRound(selectedRow, selectedColumn);
     updateScreen();
   }
   boardDiv.addEventListener("click", clickHandlerBoard);
