@@ -68,7 +68,8 @@ function WinningLogic(board, row, col) {
     }
     return board[row][col].getValue();
   };
-  const seenCells = [[row, col]];
+  const winningCells = [[row, col]];
+
   // function to check in both directions from a given start point
   const checkDirection = (dx, dy) => {
     let count = 1; //current cell is already included
@@ -77,7 +78,7 @@ function WinningLogic(board, row, col) {
 
     while (cellValueAt(r, c) === board[row][col].getValue()) {
       count++;
-      seenCells.push([r, c]);
+      winningCells.push([r, c]);
       r += dx;
       c += dy;
     }
@@ -87,7 +88,7 @@ function WinningLogic(board, row, col) {
     c = col - dy;
     while (cellValueAt(r, c) === board[row][col].getValue()) {
       count++;
-      seenCells.push([r, c]);
+      winningCells.push([r, c]);
       r -= dx;
       c -= dy;
     }
@@ -98,12 +99,11 @@ function WinningLogic(board, row, col) {
     if (checkDirection(0, 1) >= 3) return true; //Horizontal
     if (checkDirection(1, 1) >= 3) return true; //Diagonal forward
     if (checkDirection(-1, 1) >= 3) return true; //Diagonal backward
-    console.log("board: ");
     return false;
   };
   return {
     checkWin,
-    winningCells: seenCells,
+    winningCells,
   };
 }
 // end of winning logic
@@ -133,6 +133,7 @@ function GameController(
 
   let activePlayer = players[0];
   let winningLogic;
+  let emptyCells = 9;
 
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -155,8 +156,12 @@ function GameController(
       /*  This is where we would check for a winner and handle that logic,
         such as a win message. */
       winningLogic = WinningLogic(board.getBoard(), row, column);
+      if (emptyCells > 0) {
+        emptyCells--;
+      }
+      console.log(emptyCells);
       if (winningLogic.checkWin()) {
-        console.log(winningLogic.winningCells);
+        return console.log(winningLogic.winningCells);
       }
 
       // Switch player turn
@@ -181,6 +186,7 @@ function GameController(
     getActivePlayer,
     getBoard: board.getBoard,
     winningLogic,
+    emptyCells,
   };
 }
 
