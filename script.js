@@ -292,19 +292,18 @@ function screenController(player1, player2) {
         cellDOM.style.color = "#aa5555";
       });
       // add strike trhough line logic
-      const lineCoords = winningCellsDOM
-        .filter((el, i) => {
-          return i !== 1;
-        })
-        .reduce((acc, el, i) => {
-          const rect = el.getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
+      const lineCoords = [
+        winningCellsDOM[0],
+        winningCellsDOM[winningCellsDOM.length - 1],
+      ].reduce((acc, el, i) => {
+        const rect = el.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
 
-          acc[`x${i + 1}`] = centerX;
-          acc[`y${i + 1}`] = centerY;
-          return acc;
-        }, {});
+        acc[`x${i + 1}`] = centerX;
+        acc[`y${i + 1}`] = centerY;
+        return acc;
+      }, {});
       const line = createLine(lineCoords);
       const boardDOM = document.querySelector(".board");
       boardDOM.appendChild(line);
@@ -317,6 +316,11 @@ function screenController(player1, player2) {
     if (game.getEmptyCells() <= 0) {
       updateScreen();
       addRetryBtn();
+
+      // do something with winning cells style
+      boardDiv.removeEventListener("click", clickHandlerBoard);
+      boardDiv.classList.add("deactivated");
+
       return (playerTurnDiv.textContent = "This is a Draw!");
     }
     updateScreen();
