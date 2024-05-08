@@ -254,6 +254,16 @@ function screenController(player1, player2) {
     game.playRound(selectedRow, selectedColumn);
     const winningLogic = game.getWinningLogic();
 
+    const addRetryBtn = () => {
+      // add retry button
+      const retryBtn = document.createElement("button");
+      retryBtn.textContent = "Retry";
+      retryBtn.type = "button";
+      retryBtn.onclick = gameMenu;
+      retryBtn.classList.add("retry-button"); // Adding a class
+
+      container.appendChild(retryBtn);
+    };
     if (winningLogic.checkWin()) {
       updateScreen();
       const winningCells = winningLogic.getWinningCells();
@@ -297,18 +307,17 @@ function screenController(player1, player2) {
         }, {});
       // const line = createLine(lineCoords);
       // container.appendChild(line);
-      // add retry button
-      const retryBtn = document.createElement("button");
-      retryBtn.textContent = "Retry";
-      retryBtn.type = "button";
-      retryBtn.onclick = gameMenu;
-      retryBtn.classList.add("retry-button"); // Adding a class
 
-      container.appendChild(retryBtn);
+      addRetryBtn();
 
       return;
     }
     console.log(game.getEmptyCells());
+    if (game.getEmptyCells() <= 0) {
+      updateScreen();
+      addRetryBtn();
+      return (playerTurnDiv.textContent = "This is a Draw!");
+    }
     updateScreen();
   }
   boardDiv.addEventListener("click", clickHandlerBoard);
