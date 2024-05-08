@@ -60,6 +60,7 @@ input[type="text"] {
   width: 200px;
 }
 button[type="submit"] {
+  margin-top: 3px;
   padding: 10px 20px;
   font-size: 18px;
   background-color: #808080;
@@ -92,6 +93,7 @@ h1 {
   transform: translateY(calc(-100% - 8px));
 }
 .board {
+  position: relative;
   display: grid;
   max-height: 80vh;
   max-width: 80vw;

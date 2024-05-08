@@ -305,8 +305,9 @@ function screenController(player1, player2) {
           acc[`y${i + 1}`] = centerY;
           return acc;
         }, {});
-      // const line = createLine(lineCoords);
-      // container.appendChild(line);
+      const line = createLine(lineCoords);
+      const boardDOM = document.querySelector(".board");
+      boardDOM.appendChild(line);
 
       addRetryBtn();
 
@@ -360,6 +361,10 @@ gameMenu();
 
 // helper function
 function createLine({ x2, y2, x1, y1 }) {
+  const boardDOM = document.querySelector(".board");
+  const boardRect = boardDOM.getBoundingClientRect();
+
+  console.log({ x2, y2, x1, y1 });
   const line = document.createElement("div");
   line.classList.add("line");
 
@@ -367,13 +372,13 @@ function createLine({ x2, y2, x1, y1 }) {
   const angle = (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI;
 
   line.style.width = length + "px";
-  line.style.height = "2px";
-  line.style.backgroundColor = "black";
+  line.style.height = "4px";
+  line.style.backgroundColor = "rgba(0,0,0,0.5)";
   line.style.position = "absolute";
-  line.style.left = x1 + "px";
-  line.style.top = y1 + "px";
+  line.style.left = x1 - boardRect.left + "px";
+  line.style.top = y1 - boardRect.top + "px";
   line.style.transformOrigin = "0 0";
-  line.style.stransform = "rotate(${angle}deg)";
+  line.style.transform = `rotate(${angle}deg)`;
 
   return line;
 }
