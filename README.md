@@ -13,6 +13,10 @@ This is a simple Tic Tac Toe game implemented using HTML, CSS and JavaScript. Th
 1. Clone the repository.
 2. Open `index.html` in your web browser.
 
+## Live Demo
+
+You can try the live version of the game [here](https://beqarion.github.io/TOP-Tictactoe/)
+
 ## Credits
 
 This project was manly developed by me, but I used some references, including ChatGPT. In cases where I used references, I first tried to solve the problems myself, and then referred to examples. This is the way ©
