@@ -69,17 +69,19 @@ function WinningLogic(board, row, col) {
     }
     return board[row][col].getValue();
   };
-  const winningCells = [[row, col]];
+  let winningCells;
+  let direction;
   const getWinningCells = () => winningCells;
   // function to check in both directions from a given start point
-  const checkDirection = (dx, dy) => {
+  const checkDirection = (dx, dy, dirParameter) => {
+    const cellSeries = [[row, col]];
     let count = 1; //current cell is already included
     let r = row + dx;
     let c = col + dy;
 
     while (cellValueAt(r, c) === board[row][col].getValue()) {
       count++;
-      winningCells.push([r, c]);
+      cellSeries.push([r, c]);
       r += dx;
       c += dy;
     }
@@ -89,15 +91,16 @@ function WinningLogic(board, row, col) {
     c = col - dy;
     while (cellValueAt(r, c) === board[row][col].getValue()) {
       count++;
-      winningCells.push([r, c]);
+      cellSeries.push([r, c]);
       r -= dx;
       c -= dy;
     }
+    winningCells = cellSeries;
     return count;
   };
   const checkWin = () => {
     if (!hasWon) {
-      if (checkDirection(1, 0) >= 3) {
+      if (checkDirection(1, 0, "vertical") >= 3) {
         hasWon = true;
         return true;
       } //Vertical
@@ -270,19 +273,17 @@ function screenController(player1, player2) {
       console.log(winningCells);
       let allCellsDOM = Array.from(document.querySelectorAll(".cell"));
 
-      const winningCellsDOM = allCellsDOM
-        .filter((cellDOM) => {
-          const row = +cellDOM.dataset.row;
-          const col = +cellDOM.dataset.column;
+      const winningCellsDOM = allCellsDOM.filter((cellDOM) => {
+        const row = +cellDOM.dataset.row;
+        const col = +cellDOM.dataset.column;
 
-          for (let [r, c] of winningCells) {
-            if (row === r && col === c) {
-              return true;
-            }
+        for (let [r, c] of winningCells) {
+          if (row === r && col === c) {
+            return true;
           }
-          return false;
-        })
-        .slice(-3);
+        }
+        return false;
+      });
 
       // do something with winning cells style
       boardDiv.removeEventListener("click", clickHandlerBoard);
