@@ -70,10 +70,9 @@ function WinningLogic(board, row, col) {
     return board[row][col].getValue();
   };
   let winningCells;
-  let direction;
   const getWinningCells = () => winningCells;
   // function to check in both directions from a given start point
-  const checkDirection = (dx, dy, dirParameter) => {
+  const checkDirection = (dx, dy) => {
     const cellSeries = [[row, col]];
     let count = 1; //current cell is already included
     let r = row + dx;
@@ -100,7 +99,7 @@ function WinningLogic(board, row, col) {
   };
   const checkWin = () => {
     if (!hasWon) {
-      if (checkDirection(1, 0, "vertical") >= 3) {
+      if (checkDirection(1, 0) >= 3) {
         hasWon = true;
         return true;
       } //Vertical
