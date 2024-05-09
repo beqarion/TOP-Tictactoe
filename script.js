@@ -267,19 +267,22 @@ function screenController(player1, player2) {
     if (winningLogic.checkWin()) {
       updateScreen();
       const winningCells = winningLogic.getWinningCells();
+      console.log(winningCells);
       let allCellsDOM = Array.from(document.querySelectorAll(".cell"));
 
-      const winningCellsDOM = allCellsDOM.filter((cellDOM) => {
-        const row = +cellDOM.dataset.row;
-        const col = +cellDOM.dataset.column;
+      const winningCellsDOM = allCellsDOM
+        .filter((cellDOM) => {
+          const row = +cellDOM.dataset.row;
+          const col = +cellDOM.dataset.column;
 
-        for (let [r, c] of winningCells) {
-          if (row === r && col === c) {
-            return true;
+          for (let [r, c] of winningCells) {
+            if (row === r && col === c) {
+              return true;
+            }
           }
-        }
-        return false;
-      });
+          return false;
+        })
+        .slice(-3);
 
       // do something with winning cells style
       boardDiv.removeEventListener("click", clickHandlerBoard);
